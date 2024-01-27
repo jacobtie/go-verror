@@ -59,7 +59,7 @@ Creates a new `VError` struct which wraps an error with an additional error stri
 
 ```go
 if err := validate(foobar); err != nil {
-    return verror.NewWithCause(err, "foobar %s is invalid", foobar.Name)
+    return verror.NewWithCause(err, "foobar is invalid")
 }
 ```
 
