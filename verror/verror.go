@@ -4,26 +4,26 @@ import "fmt"
 
 type VError struct {
 	msg   string
-	info  map[string]any
+	info  map[string]interface{}
 	cause error
 }
 
 type Options struct {
-	Info  map[string]any
+	Info  map[string]interface{}
 	Cause error
 }
 
-func New(msg string, params ...any) *VError {
+func New(msg string, params ...interface{}) *VError {
 	return &VError{
 		msg:   fmt.Sprintf(msg, params...),
-		info:  make(map[string]any),
+		info:  make(map[string]interface{}),
 		cause: nil,
 	}
 }
 
-func NewWithCause(cause error, msg string, params ...any) *VError {
+func NewWithCause(cause error, msg string, params ...interface{}) *VError {
 	errMsg := fmt.Sprintf(msg, params...)
-	errInfo := make(map[string]any)
+	errInfo := make(map[string]interface{})
 	if cause != nil {
 		errMsg = fmt.Sprintf("%s: %s", errMsg, cause.Error())
 		if causeInfo, ok := Info(cause); ok {
@@ -37,9 +37,9 @@ func NewWithCause(cause error, msg string, params ...any) *VError {
 	}
 }
 
-func NewWithOpts(opts *Options, msg string, params ...any) *VError {
+func NewWithOpts(opts *Options, msg string, params ...interface{}) *VError {
 	errMsg := fmt.Sprintf(msg, params...)
-	errInfo := make(map[string]any)
+	errInfo := make(map[string]interface{})
 	var errCause error = nil
 	if opts != nil {
 		if opts.Cause != nil {
@@ -70,12 +70,12 @@ func (v *VError) Unwrap() error {
 	return v.cause
 }
 
-func Info(err error) (map[string]any, bool) {
+func Info(err error) (map[string]interface{}, bool) {
 	verror, ok := err.(*VError)
 	if !ok || verror == nil {
 		return nil, false
 	}
-	errInfo := make(map[string]any)
+	errInfo := make(map[string]interface{})
 	for k, v := range verror.info {
 		errInfo[k] = v
 	}
