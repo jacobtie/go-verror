@@ -15,7 +15,7 @@ func TestNew(t *testing.T) {
 	assert.Error(err)
 	assert.Equal("error message", err.msg)
 	assert.Equal("error message", err.Error())
-	assert.Equal(make(map[string]interface{}), err.info)
+	assert.Equal(make(map[string]any), err.info)
 	assert.Nil(err.cause)
 	assert.Nil(err.Unwrap())
 }
@@ -28,7 +28,7 @@ func TestNewFormat(t *testing.T) {
 	assert.Error(err)
 	assert.Equal("error 17 message msg", err.msg)
 	assert.Equal("error 17 message msg", err.Error())
-	assert.Equal(make(map[string]interface{}), err.info)
+	assert.Equal(make(map[string]any), err.info)
 	assert.Nil(err.cause)
 	assert.Nil(err.Unwrap())
 }
@@ -42,7 +42,7 @@ func TestNewWithCause(t *testing.T) {
 	assert.Error(err)
 	assert.Equal("new 17 error: original error", err.msg)
 	assert.Equal("new 17 error: original error", err.Error())
-	assert.Equal(make(map[string]interface{}), err.info)
+	assert.Equal(make(map[string]any), err.info)
 	assert.Equal(originalErr, err.cause)
 	assert.Equal(originalErr, err.Unwrap())
 }
@@ -58,7 +58,7 @@ func TestNewWithCauseNested(t *testing.T) {
 	assert.Error(err)
 	assert.Equal("new error: original error 2: original error 1", err.msg)
 	assert.Equal("new error: original error 2: original error 1", err.Error())
-	assert.Equal(make(map[string]interface{}), err.info)
+	assert.Equal(make(map[string]any), err.info)
 	assert.Equal(originalErr2, err.cause)
 	assert.Equal(originalErr2, err.Unwrap())
 }
@@ -67,7 +67,7 @@ func TestNewWithCauseWithInfo(t *testing.T) {
 	assert := assert.New(t)
 
 	originalErr := NewWithOpts(&Options{
-		Info: map[string]interface{}{
+		Info: map[string]any{
 			"foo": "bar",
 			"baz": 1,
 		},
@@ -78,7 +78,7 @@ func TestNewWithCauseWithInfo(t *testing.T) {
 	assert.Error(err)
 	assert.Equal("new error: original error", err.msg)
 	assert.Equal("new error: original error", err.Error())
-	assert.Equal(map[string]interface{}{
+	assert.Equal(map[string]any{
 		"foo": "bar",
 		"baz": 1,
 	}, err.info)
@@ -90,14 +90,14 @@ func TestNewWithNestedCauseWithInfo(t *testing.T) {
 	assert := assert.New(t)
 
 	originalErr1 := NewWithOpts(&Options{
-		Info: map[string]interface{}{
+		Info: map[string]any{
 			"foo": "bar",
 			"baz": 1,
 		},
 	}, "original error 1")
 	originalErr2 := NewWithOpts(&Options{
 		Cause: originalErr1,
-		Info: map[string]interface{}{
+		Info: map[string]any{
 			"que": false,
 			"baz": 2,
 		},
@@ -108,7 +108,7 @@ func TestNewWithNestedCauseWithInfo(t *testing.T) {
 	assert.Error(err)
 	assert.Equal("new 17 error msg: original error 2: original error 1", err.msg)
 	assert.Equal("new 17 error msg: original error 2: original error 1", err.Error())
-	assert.Equal(map[string]interface{}{
+	assert.Equal(map[string]any{
 		"foo": "bar",
 		"baz": 2,
 		"que": false,
@@ -121,7 +121,7 @@ func TestNewWithOptions(t *testing.T) {
 	assert := assert.New(t)
 
 	err := NewWithOpts(&Options{
-		Info: map[string]interface{}{
+		Info: map[string]any{
 			"foo": "bar",
 			"baz": 1,
 		},
@@ -130,7 +130,7 @@ func TestNewWithOptions(t *testing.T) {
 	assert.Error(err)
 	assert.Equal("error message", err.msg)
 	assert.Equal("error message", err.Error())
-	assert.Equal(map[string]interface{}{
+	assert.Equal(map[string]any{
 		"foo": "bar",
 		"baz": 1,
 	}, err.info)
@@ -150,7 +150,7 @@ func TestNewOptionsWithCause(t *testing.T) {
 	assert.Error(err)
 	assert.Equal("new error: original error", err.msg)
 	assert.Equal("new error: original error", err.Error())
-	assert.Equal(make(map[string]interface{}), err.info)
+	assert.Equal(make(map[string]any), err.info)
 	assert.Equal(originalError, err.cause)
 	assert.Equal(originalError, err.Unwrap())
 }
@@ -168,7 +168,7 @@ func TestNewOptionsWithNestedCause(t *testing.T) {
 	assert.Error(err)
 	assert.Equal("new 17 error msg: original error 2: original error 1", err.msg)
 	assert.Equal("new 17 error msg: original error 2: original error 1", err.Error())
-	assert.Equal(make(map[string]interface{}), err.info)
+	assert.Equal(make(map[string]any), err.info)
 	assert.Equal(originalErr2, err.cause)
 	assert.Equal(originalErr2, err.Unwrap())
 }
@@ -180,7 +180,7 @@ func TestNewOptionsWithCauseAndInfo(t *testing.T) {
 
 	err := NewWithOpts(&Options{
 		Cause: originalError,
-		Info: map[string]interface{}{
+		Info: map[string]any{
 			"foo": "bar",
 			"baz": 1,
 		},
@@ -189,7 +189,7 @@ func TestNewOptionsWithCauseAndInfo(t *testing.T) {
 	assert.Error(err)
 	assert.Equal("new error: original error", err.msg)
 	assert.Equal("new error: original error", err.Error())
-	assert.Equal(map[string]interface{}{
+	assert.Equal(map[string]any{
 		"foo": "bar",
 		"baz": 1,
 	}, err.info)
@@ -203,21 +203,21 @@ func TestNewOptionsWithCauseAndInfoNested(t *testing.T) {
 	originalErr1 := fmt.Errorf("original error 1")
 	originalErr2 := NewWithOpts(&Options{
 		Cause: originalErr1,
-		Info: map[string]interface{}{
+		Info: map[string]any{
 			"foo": "bar",
 			"baz": 1,
 		},
 	}, "original error 2")
 	originalErr3 := NewWithOpts(&Options{
 		Cause: originalErr2,
-		Info: map[string]interface{}{
+		Info: map[string]any{
 			"que": false,
 		},
 	}, "original error 3")
 
 	err := NewWithOpts(&Options{
 		Cause: originalErr3,
-		Info: map[string]interface{}{
+		Info: map[string]any{
 			"baz":    2,
 			"foobar": map[string]int{"a": 1, "b": 2},
 		},
@@ -226,7 +226,7 @@ func TestNewOptionsWithCauseAndInfoNested(t *testing.T) {
 	assert.Error(err)
 	assert.Equal("new error: original error 3: original error 2: original error 1", err.msg)
 	assert.Equal("new error: original error 3: original error 2: original error 1", err.Error())
-	assert.Equal(map[string]interface{}{
+	assert.Equal(map[string]any{
 		"foo":    "bar",
 		"baz":    2,
 		"que":    false,
@@ -242,20 +242,20 @@ func TestInfo(t *testing.T) {
 	originalErr1 := fmt.Errorf("original error 1")
 	originalErr2 := NewWithOpts(&Options{
 		Cause: originalErr1,
-		Info: map[string]interface{}{
+		Info: map[string]any{
 			"foo": "bar",
 			"baz": 1,
 		},
 	}, "original error 2")
 	originalErr3 := NewWithOpts(&Options{
 		Cause: originalErr2,
-		Info: map[string]interface{}{
+		Info: map[string]any{
 			"que": false,
 		},
 	}, "original error 3")
 	err := NewWithOpts(&Options{
 		Cause: originalErr3,
-		Info: map[string]interface{}{
+		Info: map[string]any{
 			"baz":    2,
 			"foobar": map[string]int{"a": 1, "b": 2},
 		},
@@ -264,7 +264,7 @@ func TestInfo(t *testing.T) {
 	info, ok := Info(err)
 
 	assert.True(ok)
-	assert.Equal(map[string]interface{}{
+	assert.Equal(map[string]any{
 		"foo":    "bar",
 		"baz":    2,
 		"que":    false,

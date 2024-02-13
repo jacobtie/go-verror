@@ -73,7 +73,7 @@ Creates a new `VError` struct which can optionally wrap an error with an additio
 if err := validate(foobar); err != nil {
     return verror.NewWithOpts(&verror.Options{
         Cause: err,
-        Info: map[string]interface{}{
+        Info: map[string]any{
             "foo": "bar",
             "baz": 1,
         },
@@ -93,6 +93,6 @@ To access the info off a `VError`, call the `verror.Info` function.
 info, ok := verror.Info(err)
 ```
 
-This function will return the shallow copied `info` from the `VError` as a `map[string]interface{}` and an `ok` Boolean. If `ok` is `true`, then `info` will be a non-nil map of wrapped error information. If `ok` is `false`, then the error passed in was `nil` or was not a `VError`, in which case, `info` will be a `nil` map.
+This function will return the shallow copied `info` from the `VError` as a `map[string]any` and an `ok` Boolean. If `ok` is `true`, then `info` will be a non-nil map of wrapped error information. If `ok` is `false`, then the error passed in was `nil` or was not a `VError`, in which case, `info` will be a `nil` map.
 
 A recommended pattern is to continue to return errors wrapped in `VError` structs up the call stack, adding information as you go, until the error reaches error handling code/middleware. At this point, you can use `verror.Info` to extract the error data and, if there is info, to log the information for richer error logs.
